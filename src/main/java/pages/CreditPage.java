@@ -53,7 +53,7 @@ public class CreditPage {
                 .until((ExpectedCondition<Boolean>) d -> !monthlyPayment.getText().equals(monthly));
     }
 
-    public void fillField(String name, String value)  {
+    public void fillField(String name, String value) {
         if (name.equals("Стоимость недвижимости")) {
             switchToFrame();
         }
@@ -123,8 +123,8 @@ public class CreditPage {
                 Assert.assertEquals(value, requiredIncome.getText());
                 break;
             case "Процентная ставка":
-                Assert.assertEquals(value, rate.getText());
                 Allure.addAttachment("fdagadfg", value);
+                Assert.assertEquals(value, rate.getText());
             default:
                 throw new AssertionError("Поле '" + field + "' не объявлено на странице");
 
