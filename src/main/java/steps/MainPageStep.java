@@ -8,6 +8,7 @@ public class MainPageStep {
     public void selectMenu(String arg0) throws Throwable {
         new MainPage().selectMenu(arg0);
     }
+
     @Step("выбран вид ипотеки {0}")
     public void selectMenuItem(String arg0) throws Throwable {
         new MainPage().selectMenuItem(arg0);

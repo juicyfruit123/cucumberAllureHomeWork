@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -22,6 +23,7 @@ public class MainPage {
         actions.click().perform();
     }
 
+    @Step("Выбор меню")
     public void selectMenu(String itemName) {
         menu.findElement(By.xpath("//span[text()='" + itemName + "']")).click();
     }

@@ -7,11 +7,7 @@ import util.AllureReporter;
 public class CreditPageStep {
     @Step("поле {0} заполняется значением {1}")
     public void fillField(String field, String value) {
-        try {
-            new CreditPage().fillField(field, value);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        new CreditPage().fillField(field, value);
     }
 
     @Step("проверка значения поля {0}")

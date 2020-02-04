@@ -1,14 +1,14 @@
 package pages;
 
-import cucumber.api.java.cs.A;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import steps.BaseTest;
 
@@ -24,9 +24,9 @@ public class CreditPage {
     @FindBy(xpath = "//div[text()='Есть зарплатная карта Сбербанка']/../.././/label")
     WebElement buttonKardSber;
     @FindBy(xpath = "//div[text()='Есть возможность подтвердить доход справкой']/../.././/label")
-    WebElement button;
+    WebElement confirmYourIncomeButton;
     @FindBy(xpath = "//div[text()='Молодая семья']/../.././/label")
-    WebElement button1;
+    WebElement youngFamilyButton;
     @FindBy(xpath = "//span[@data-test-id='amountOfCredit']")
     WebElement amountOfCredit;
     @FindBy(xpath = "//span[@data-test-id='monthlyPayment']")
@@ -41,57 +41,49 @@ public class CreditPage {
         PageFactory.initElements(BaseTest.getDriver(), this);
     }
 
-    public void createField() {
+    public void switchToFrame() {
         BaseTest.getDriver().switchTo().frame(frame);
         JAVASCRIPT_EXECUTOR = (JavascriptExecutor) BaseTest.getDriver();
         JAVASCRIPT_EXECUTOR.executeScript("return arguments[0].scrollIntoView(true);", costHouse);
     }
 
 
-    public void waitField(String monthly) {
+    public void waitMonthlyPayment(String monthly) {
         (new WebDriverWait(BaseTest.getDriver(), 10))
                 .until((ExpectedCondition<Boolean>) d -> !monthlyPayment.getText().equals(monthly));
     }
 
-    public void fillField(String name, String value) throws InterruptedException {
+    public void fillField(String name, String value)  {
         if (name.equals("Стоимость недвижимости")) {
-            createField();
+            switchToFrame();
         }
-
         switch (name) {
             case "Стоимость недвижимости":
-                Thread.sleep(5000);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 costHouse.clear();
-                (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> costHouse.getAttribute("value").equals(""));
                 costHouse.sendKeys(value);
-                waitField(monthlyPayment.getAttribute("value"));
-             /*   (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> costHouse.getAttribute("value").replaceAll("\\D","").equals(value));
-             */ //  Thread.sleep(5000);
+                waitMonthlyPayment(monthlyPayment.getText());
                 break;
             case "Первоначальный взнос":
-                (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> !firstPay.getAttribute("value").equals(""));
-
-             //   firstPay.sendKeys(Keys.LEFT_CONTROL+"a");
-                Actions actions = new Actions(BaseTest.getDriver());
-                actions.moveToElement(firstPay).build().perform();
-                   /*    (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> firstPay.getAttribute("value").equals(""));
-        */        firstPay.sendKeys(value);
-                waitField(monthlyPayment.getText());
-         /*       (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> firstPay.getAttribute("value").replaceAll("\\D","").equals(value));
-         */       break;
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                firstPay.clear();
+                firstPay.sendKeys(value);
+                waitMonthlyPayment(monthlyPayment.getText());
+                break;
             case "Срок кредита":
-                (new WebDriverWait(BaseTest.getDriver(), 10))
-                        .until((ExpectedCondition<Boolean>) d -> !firstPay.getAttribute("value").equals("value"));
                 creditContinue.clear();
                 (new WebDriverWait(BaseTest.getDriver(), 10))
                         .until((ExpectedCondition<Boolean>) d -> creditContinue.getAttribute("value").replaceAll("\\D", "").equals(""));
                 creditContinue.sendKeys(value);
-                waitField(monthlyPayment.getText());
+                waitMonthlyPayment(monthlyPayment.getText());
                 break;
             default:
                 throw new AssertionError("Поле '" + name + "' не объявлено на странице");
@@ -106,20 +98,19 @@ public class CreditPage {
             e.printStackTrace();
         }
         buttonKardSber.click();
-
+        waitMonthlyPayment(monthlyPayment.getText());
     }
 
     public void clickYoungFamily() {
         JAVASCRIPT_EXECUTOR = (JavascriptExecutor) BaseTest.getDriver();
-        JAVASCRIPT_EXECUTOR.executeScript("return arguments[0].scrollIntoView(true);", button);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        button1.click();
+        JAVASCRIPT_EXECUTOR.executeScript("return arguments[0].scrollIntoView(true);", confirmYourIncomeButton);
+        (new WebDriverWait(BaseTest.getDriver(), 10))
+                .until(ExpectedConditions.elementToBeClickable(youngFamilyButton));
+        youngFamilyButton.click();
+        waitMonthlyPayment(monthlyPayment.getText());
     }
 
+    @Step("Проверка полей")
     public void checkField(String field, String value) {
         switch (field) {
             case "Сумма кредита":
@@ -133,6 +124,7 @@ public class CreditPage {
                 break;
             case "Процентная ставка":
                 Assert.assertEquals(value, rate.getText());
+                Allure.addAttachment("fdagadfg", value);
             default:
                 throw new AssertionError("Поле '" + field + "' не объявлено на странице");
 

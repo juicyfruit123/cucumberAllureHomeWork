@@ -4,16 +4,14 @@ import cucumber.api.DataTable;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Когда;
 import cucumber.api.java.ru.Тогда;
-import pages.CreditPage;
 import ru.yandex.qatools.allure.annotations.Step;
-import ru.yandex.qatools.allure.exceptions.AllureException;
-import util.AllureReporter;
 
 public class MyStepdefs {
     private MainPageStep mainPageDef = new MainPageStep();
     CreditPageStep creditPageStep = new CreditPageStep();
-    @Step("выбран пункт меню ")
+
     @Когда("^выбрано меню \"([^\"]*)\"$")
+    @Step("выбран пункт меню ")
     public void selectMenu(String arg0) throws Throwable {
         mainPageDef.selectMenu(arg0);
     }
@@ -41,7 +39,7 @@ public class MyStepdefs {
 
     @Тогда("^проверить значения полей:$")
     public void checkField(DataTable table) {
-      BaseTest.takeScreenshot();
+        BaseTest.takeScreenshot();
         table.asMap(String.class, String.class)
                 .forEach((field, value) -> creditPageStep.checkField(field, value));
     }
