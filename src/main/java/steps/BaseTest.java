@@ -8,9 +8,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import util.TestProperties;
 
+import java.net.URI;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -32,10 +35,17 @@ public class BaseTest {
                 break;
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver"));
-                ChromeOptions ChromeOptions = new ChromeOptions(); //1
-                ChromeOptions.addArguments("--headless", "window-size=1024,768", "--no-sandbox"); //1
-                driver = new ChromeDriver();
-                break;
+                DesiredCapabilities capabilities = new DesiredCapabilities();
+                capabilities.setBrowserName("chrome");
+                capabilities.setVersion("73.0");
+                capabilities.setCapability("enableVNC", true);
+                capabilities.setCapability("enableVideo", false);
+                capabilities.setCapability("enableLog", false);
+                 driver = new RemoteWebDriver(
+                        URI.create("http://selenoid.aplana.com:4445/wd/hub/").toURL(),
+                        capabilities);
+               /*         driver = new ChromeDriver();
+               */ break;
         }
 
         url = properties.getProperty("app.url");
