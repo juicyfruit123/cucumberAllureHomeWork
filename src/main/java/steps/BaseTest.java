@@ -6,6 +6,7 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.yandex.qatools.allure.annotations.Attachment;
 import util.TestProperties;
@@ -31,6 +32,8 @@ public class BaseTest {
                 break;
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", properties.getProperty("webdriver.chrome.driver"));
+                ChromeOptions ChromeOptions = new ChromeOptions(); //1
+                ChromeOptions.addArguments("--headless", "window-size=1024,768", "--no-sandbox"); //1
                 driver = new ChromeDriver();
                 break;
         }
