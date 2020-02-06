@@ -118,4 +118,13 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>my_profile</id>
+            <properties>
+                <!--suppress UnresolvedMavenProperty -->
+                <browser>${env.BROWSER_PARAM}</browser>
+            </properties>
+        </profile>
+    </profiles>
 </project>
