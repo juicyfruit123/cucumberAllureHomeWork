@@ -1,7 +1,7 @@
 package steps;
 
+import io.qameta.allure.Step;
 import pages.MainPage;
-import ru.yandex.qatools.allure.annotations.Step;
 
 public class MainPageStep {
     @Step("выбран пункт меню {0}")

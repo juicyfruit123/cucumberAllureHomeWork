@@ -1,17 +1,15 @@
 package steps;
 
-import cucumber.api.DataTable;
 import cucumber.api.java.ru.И;
 import cucumber.api.java.ru.Когда;
 import cucumber.api.java.ru.Тогда;
-import ru.yandex.qatools.allure.annotations.Step;
+import io.cucumber.datatable.DataTable;
 
 public class MyStepdefs {
     private MainPageStep mainPageDef = new MainPageStep();
     CreditPageStep creditPageStep = new CreditPageStep();
 
     @Когда("^выбрано меню \"([^\"]*)\"$")
-    @Step("выбран пункт меню ")
     public void selectMenu(String arg0) throws Throwable {
         mainPageDef.selectMenu(arg0);
     }
@@ -24,7 +22,7 @@ public class MyStepdefs {
     @Когда("^заполняются поля:$")
     public void fillField(DataTable table) {
         table.asMap(String.class, String.class)
-                .forEach((field, value) -> creditPageStep.fillField(field, value));
+                .forEach((field, value) -> creditPageStep.fillField((String) field, (String) value));
     }
 
     @Когда("^снята галочка Зарплатная карта$")
@@ -41,6 +39,6 @@ public class MyStepdefs {
     public void checkField(DataTable table) {
         BaseTest.takeScreenshot();
         table.asMap(String.class, String.class)
-                .forEach((field, value) -> creditPageStep.checkField(field, value));
+                .forEach((field, value) -> creditPageStep.checkField((String) field, (String) value));
     }
 }

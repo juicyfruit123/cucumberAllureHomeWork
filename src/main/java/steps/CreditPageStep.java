@@ -1,8 +1,7 @@
 package steps;
 
+import io.qameta.allure.Step;
 import pages.CreditPage;
-import ru.yandex.qatools.allure.annotations.Step;
-import util.AllureReporter;
 
 public class CreditPageStep {
     @Step("поле {0} заполняется значением {1}")
@@ -12,8 +11,6 @@ public class CreditPageStep {
 
     @Step("проверка значения поля {0}")
     public void checkField(String field, String value) {
-        AllureReporter allureReporter = new AllureReporter();
-        allureReporter.takeScreenshot();
         new CreditPage().checkField(field, value);
 
     }
